@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { CheckCircle, TrendingUp, ShieldCheck, Wallet, Calendar } from 'lucide-react';
+import { CheckCircle, TrendingUp, ShieldCheck, Wallet, Calendar, BarChart3 } from 'lucide-react';
 import { CalendlyModal } from './CalendlyModal';
+import { StressTestingAnalysis } from './StressTestingAnalysis';
 import type { Assessment, FinancialProfile } from '../types';
 
 interface ScoreDisplayProps {
@@ -10,6 +11,7 @@ interface ScoreDisplayProps {
 
 export function ScoreDisplay({ assessment, profile }: ScoreDisplayProps) {
   const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
+  const [showStressTesting, setShowStressTesting] = useState(false);
   const { score, riskLevel, recommendations } = assessment;
 
   const riskColors = {
@@ -19,7 +21,7 @@ export function ScoreDisplay({ assessment, profile }: ScoreDisplayProps) {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="w-full max-w-6xl mx-auto">
       <div className="text-center mb-12">
         <h2 className="text-3xl font-bold mb-4">Your Risk Assessment Results</h2>
         <p className="text-gray-600">Based on your responses, here's your personalized analysis</p>
@@ -94,7 +96,29 @@ export function ScoreDisplay({ assessment, profile }: ScoreDisplayProps) {
         </ul>
       </div>
 
-      <div className="text-center space-y-4">
+      {/* Stress Testing Toggle */}
+      <div className="text-center mb-8">
+        <button
+          onClick={() => setShowStressTesting(!showStressTesting)}
+          className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-500 
+                   text-white rounded-lg hover:from-purple-700 hover:to-purple-600 
+                   transition-all duration-200 focus:outline-none focus:ring-2 
+                   focus:ring-purple-500 focus:ring-offset-2 shadow-lg hover:shadow-xl 
+                   transform hover:-translate-y-0.5"
+        >
+          <BarChart3 className="w-5 h-5 mr-2" />
+          {showStressTesting ? 'Hide' : 'View'} Portfolio Stress Testing Analysis
+        </button>
+      </div>
+
+      {/* Stress Testing Analysis */}
+      {showStressTesting && (
+        <div className="animate-fadeIn">
+          <StressTestingAnalysis assessment={assessment} />
+        </div>
+      )}
+
+      <div className="text-center space-y-4 mt-12">
         <button
           onClick={() => setIsCalendlyOpen(true)}
           className="inline-flex items-center px-6 py-3 bg-blue-600 text-white 
